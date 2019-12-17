@@ -2,9 +2,22 @@
 """This is the place class"""
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
-from models.review import Review
+from sqlalchemy import Column, Table, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
+from os import getenv
+import models
+
+
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    place_amenity = Table("place_amenity", Base.metadata,
+                          Column("place_id", String(60),
+                                 ForeignKey("places.id"),
+                                 primary_key=True,
+                                 nullable=False),
+                          Column("amenity_id", String(60),
+                                 ForeignKey("amenities.id"),
+                                 primary_key=True,
+                                 nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -34,20 +47,35 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
-    reviews = relationship("Review", cascade='all, delete, delete-orphan',
-                           backref="place")
 
-    @property
-    def reviews(self):
-        var = model.storage.all()
-        lista = []
-        result = []
-        for key in var:
-            review = key.replace('.', ' ')
-            review = shlex.split(review)
-            if (review[0] == 'Review'):
-                lista.append(var[key])
-        for elem in lista:
-            if (elem.place_id == self.id):
-                result.append(elem)
-        return (result)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", cascade='all, delete, delete-orphan',
+                               backref="place")
+
+        amenities = relationship("Amenity", secondary="place_amenity",
+                                 viewonly=False,
+                                 backref="place_amenities")
+    else:
+        @property
+        def reviews(self):
+            var = models.storage.all()
+            lista = []
+            result = []
+            for key in var:
+                review = key.replace('.', ' ')
+                review = shlex.split(review)
+                if (review[0] == 'Review'):
+                    lista.append(var[key])
+            for elem in lista:
+                if (elem.place_id == self.id):
+                    result.append(elem)
+            return (result)
+
+        @property
+        def amenities(self):
+            return self.amenity_ids
+
+        @amenities.setter
+        def amenities(self, obj=None):
+            if obj and obj.__class__.__name__ == "Amenity":
+                self.amenity_ids.append(obj.id)
