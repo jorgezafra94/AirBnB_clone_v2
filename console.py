@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
-from models import storage
+import models
 from datetime import datetime
 from models.base_model import BaseModel
 from models.user import User
@@ -42,9 +42,7 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            print(my_list)
             obj = eval("{}()".format(my_list[0]))
-            obj.save()
             print("{}".format(obj.id))
             for num in range(1, len(my_list)):
                 my_list[num] = my_list[num].replace('=', ' ')
@@ -57,6 +55,7 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 if type(attributes[1]) is not tuple:
                     setattr(obj, attributes[0], attributes[1])
+            obj.save()
         except SyntaxError:
             print("** class name missing **")
         except NameError:
@@ -78,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = storage.all()
+            objects = models.storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 print(objects[key])
@@ -109,11 +108,11 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = storage.all()
+            objects = models.storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 del objects[key]
-                storage.save()
+                models.storage.save()
             else:
                 raise KeyError()
         except SyntaxError:
@@ -130,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        objects = storage.all()
+        objects = models.storage.all()
         my_list = []
         if not line:
             for key in objects:
@@ -167,7 +166,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = storage.all()
+            objects = models.storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key not in objects:
                 raise KeyError()
@@ -202,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
             my_list = split(line, " ")
             if my_list[0] not in self.all_classes:
                 raise NameError()
-            objects = storage.all()
+            objects = models.storage.all()
             for key in objects:
                 name = key.split('.')
                 if name[0] == my_list[0]:
@@ -251,7 +250,7 @@ class HBNBCommand(cmd.Cmd):
             elif my_list[1][:6] == "update":
                 args = self.strip_clean(my_list)
                 if isinstance(args, list):
-                    obj = storage.all()
+                    obj = models.storage.all()
                     key = args[0] + ' ' + args[1]
                     for k, v in args[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))
