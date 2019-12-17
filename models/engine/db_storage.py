@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import Base
 from models.state import State
 from models.city import City
+from models.user import User
 
 
 class DBStorage:
@@ -40,7 +41,7 @@ class DBStorage:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dic[key] = elem
         else:
-            lista = [State, City]
+            lista = [State, City, User]
             for clase in lista:
                 query = self.__session.query(clase)
                 for elem in query:
