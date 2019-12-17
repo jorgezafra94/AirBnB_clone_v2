@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
-import models
+from models import storage
 from datetime import datetime
 from models.base_model import BaseModel
 from models.user import User
@@ -77,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = models.storage.all()
+            objects = storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 print(objects[key])
@@ -108,11 +108,11 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = models.storage.all()
+            objects = storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 del objects[key]
-                models.storage.save()
+                storage.save()
             else:
                 raise KeyError()
         except SyntaxError:
@@ -129,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        objects = models.storage.all()
+        objects = storage.all()
         my_list = []
         if not line:
             for key in objects:
@@ -166,7 +166,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = models.storage.all()
+            objects = storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key not in objects:
                 raise KeyError()
@@ -201,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
             my_list = split(line, " ")
             if my_list[0] not in self.all_classes:
                 raise NameError()
-            objects = models.storage.all()
+            objects = storage.all()
             for key in objects:
                 name = key.split('.')
                 if name[0] == my_list[0]:
@@ -250,7 +250,7 @@ class HBNBCommand(cmd.Cmd):
             elif my_list[1][:6] == "update":
                 args = self.strip_clean(my_list)
                 if isinstance(args, list):
-                    obj = models.storage.all()
+                    obj = storage.all()
                     key = args[0] + ' ' + args[1]
                     for k, v in args[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))

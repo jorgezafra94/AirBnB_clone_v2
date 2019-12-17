@@ -10,6 +10,7 @@ from models.city import City
 from models.user import User
 from models.place import Place
 from models.review import Review
+from models.amenity import Amenity
 
 
 class DBStorage:
@@ -43,7 +44,7 @@ class DBStorage:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dic[key] = elem
         else:
-            lista = [State, City, User, Place, Review]
+            lista = [State, City, User, Place, Review, Amenity]
             for clase in lista:
                 query = self.__session.query(clase)
                 for elem in query:
