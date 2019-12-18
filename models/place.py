@@ -57,6 +57,7 @@ class Place(BaseModel, Base):
     else:
         @property
         def reviews(self):
+            """ Returns list of reviews.id """
             var = models.storage.all()
             lista = []
             result = []
@@ -72,9 +73,11 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
+            """ Returns list of amenity ids """
             return self.amenity_ids
 
         @amenities.setter
         def amenities(self, obj=None):
-            if obj and obj.__class__.__name__ == "Amenity":
+            """ Appends amenity ids to the attribute """
+            if type(obj) is Amenity and obj.id not in self.amenity_ids:
                 self.amenity_ids.append(obj.id)
