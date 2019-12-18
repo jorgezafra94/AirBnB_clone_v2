@@ -39,7 +39,7 @@ class DBStorage:
         """
         dic = {}
         if cls:
-            query = self.__session.query(cls.__name__)
+            query = self.__session.query(cls)
             for elem in query:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dic[key] = elem
