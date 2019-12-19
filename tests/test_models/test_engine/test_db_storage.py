@@ -70,11 +70,13 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db', 'NO DB')
     def test_add(self):
         """Test same size between storage() and existing db"""
-        self.query.execute("INSERT INTO states (id, created_at, updated_at, name)\
-                      VALUES (578, '2019-05-11 00:14:40',\
-                      '2019-05-11 00:14:40', '{}')".format("boyaca"))
-
-        self.query.execute("SELECT * FROM {}".format("states"))
+        self.query.execute("SELECT * FROM states")
+        salida = self.query.fetchall()
+        self.assertEqual(len(salida), 0)
+        state = State(name="LUISILLO")
+        state.save()
+        self.db.autocommit(True)
+        self.query.execute("SELECT * FROM states")
         salida = self.query.fetchall()
         self.assertEqual(len(salida), 1)
 
