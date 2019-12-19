@@ -55,14 +55,14 @@ class TestDBStorage(unittest.TestCase):
         cls.review.text = "Amazing_place,_huge_kitchen"
         cls.review.save()
 
-
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db', 'NO DB')
     def test_pep8_DBStorage(self):
         """Test Pep8"""
         style = pep8.StyleGuide(quiet=True)
         p = style.check_files(['models/engine/db_storage.py'])
         self.assertEqual(p.total_errors, 0, "fix pep8")
 
-
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db', 'NO DB')
     def test_all_DBStorage(self):
         """Test same size between storage() and existing db"""
         User = getenv("HBNB_MYSQL_USER")
@@ -96,7 +96,7 @@ class TestDBStorage(unittest.TestCase):
         query.close()
         db.close()
 
-
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db', 'NO DB')
     def test_quantity_amenities(self):
         """Test same size between storage(amenities) and existing db"""
         User = getenv("HBNB_MYSQL_USER")
@@ -128,7 +128,7 @@ class TestDBStorage(unittest.TestCase):
         query.close()
         db.close()
 
-
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db', 'NO DB')
     def test_quantity_city(self):
         """Test same size between storage(city) and existing db"""
         User = getenv("HBNB_MYSQL_USER")
@@ -155,6 +155,41 @@ class TestDBStorage(unittest.TestCase):
                         for obj in salida:
                             lis.append(obj)
             self.assertEqual(len(dic), len(lis))
+        else:
+            self.assertEqual(len(dic), 0)
+        query.close()
+        db.close()
+
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db', 'NO DB')
+    def test_add(self):
+        """Test same size between storage(city) and existing db"""
+        User = getenv("HBNB_MYSQL_USER")
+        Passwd = getenv("HBNB_MYSQL_PWD")
+        Db = getenv("HBNB_MYSQL_DB")
+        Host = getenv("HBNB_MYSQL_HOST")
+        os.environ['HBNB_ENV'] = 'No_erase'
+        storage = DBStorage()
+        storage.reload()
+        db = MySQLdb.connect(host=Host, user=User,
+                             passwd=Passwd, db=Db,
+                             charset="utf8")
+        query = db.cursor()
+        dic = storage.all(State)
+        lis = []
+        query.execute("INSERT INTO states (id, created_at, updated_at, name)\
+                      VALUES (578, '2019-05-11 00:14:40',\
+                      '2019-05-11 00:14:40', '{}')".format("boyaca"))
+        query.execute("SHOW TABLES")
+        output = query.fetchall()
+        if len(output) != 0:
+            for elem in output:
+                if elem[0] == "states":
+                    query.execute("SELECT * FROM {}".format(elem[0]))
+                    salida = query.fetchall()
+                    if len(salida) != 0:
+                        for obj in salida:
+                            lis.append(obj)
+            self.assertEqual(len(dic) + 1, len(lis))
         else:
             self.assertEqual(len(dic), 0)
         query.close()
