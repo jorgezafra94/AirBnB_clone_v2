@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# script to configure in order to serve the static pages
 sudo apt-get -y update
 sudo apt-get -y install nginx
 # enable pass of traffic in the port 80
