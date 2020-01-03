@@ -1,9 +1,10 @@
-#!/usr/bin/env bash                                                                                                                                                                                                
+#!/usr/bin/env bash
 sudo apt-get -y update
 sudo apt-get -y install nginx
-# enable pass of traffic in the port 80                                                                                                                                                                            
+# enable pass of traffic in the port 80
 sudo ufw allow 'Nginx HTTP'
-# instructions                                                                                                                                                                                                     
+sudo service nginx start
+# instructions
 sudo mkdir -p /data/web_static/releases/test
 sudo mkdir -p /data/web_static/shared
 sudo touch /data/web_static/releases/test/index.html
