@@ -4,6 +4,11 @@ sudo apt-get -y update
 sudo apt-get -y install nginx
 # enable pass of traffic in the port 80
 sudo ufw allow 'Nginx HTTP'
+name=$HOSTNAME
+# configure the file nginx.conf in order the set the header
+sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\t# Adding Header/" /etc/nginx/nginx.conf
+sudo sed -i "s/# Adding Header/# Adding Header \n\tadd_header X-Served-By $name;/" /etc/nginx/nginx.conf
+sudo service nginx restart
 # instructions
 sudo mkdir -p /data/web_static/releases/test
 sudo mkdir -p /data/web_static/shared
