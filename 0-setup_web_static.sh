@@ -15,6 +15,6 @@ sudo ln -fs /data/web_static/releases/test /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 cd /etc/nginx/sites-available/
 sudo sed -i "s/404_page.html;/404_page.html;\n\n\t# static page/" default
-sudo sed -i "s/# static page/# static page\n\n\tlocation \/hbnb_static\/index.html {\n\t\talias \/data\/web_static\/current\/index.html;\n\t}/" default
+sudo sed -i "s/# static page/# static page\n\n\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}/" default
 cd -
 sudo service nginx restart
