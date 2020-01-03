@@ -18,7 +18,7 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 # change owner and group to ubuntu
 chown -R ubuntu:ubuntu /data/
 # change content of available-default
-sed -i '43i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t autoindex on;\n}\n' /etc/nginx/sites-available/default
+sed -i '43i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t autoindex on;\n\t}\n' /etc/nginx/sites-available/default
 # getting changes
 service nginx restart
 exit 0
