@@ -3,16 +3,21 @@
 apt-get -y update
 apt-get -y install nginx
 ufw allow 'Nginx HTTP'
+# instructions
 mkdir -p /data/web_static/releases/test/ /data/web_static/shared/
 echo "<html>
   <head>
   </head>
   <body>
-    Holberton School
+    Fake content
   </body>
 </html>" > /data/web_static/releases/test/index.html
+# symbolic link to folder erase
 ln -sf /data/web_static/releases/test/ /data/web_static/current
+# change owner and group to ubuntu
 chown -R ubuntu:ubuntu /data
-sed -i "s/root \/var\/www\/html;/root \/var\/www\/html;\n\tlocation \/hbnb_static\/ { alias \/data\/web_static\/current/;}\n" /etc/nginx/sites-available/default
+# change content of available-default
+sed -i '43i\\tlocation /hbnb_static/ {\n\t\talias /data/web_Static/current/;\n\t\t autoindex on;\n\t}\n' /etc/nginx/sites-available/default
+# getting changes
 service nginx restart
 exit 0
