@@ -23,3 +23,4 @@ sudo sed -i "s/404_page.html;/404_page.html;\n\n\t# static page/" default
 sudo sed -i "s/# static page/# static page\n\n\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}/" default
 cd -
 sudo service nginx restart
+exit 0
