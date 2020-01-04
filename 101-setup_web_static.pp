@@ -13,7 +13,7 @@ exec {'create folders':
 }
 
 exec {'create file':
-  command  => 'echo "<html>\n  <head>\n  </head>\n  <body>\n\tFake content\n  </body>\n</html>" > /data/web_static/releases/test/index.html',
+  command  => 'echo "Fake content" | sudo tee  /data/web_static/releases/test/index.html',
   provider => shell,
   before   => Exec['symbolic'],
 }
@@ -31,7 +31,8 @@ exec {'owner':
 }
 
 exec {'content':
-  command  => 'sudo sed -i '43i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t autoindex on;\n\t}\n' /etc/nginx/sites-available/default',
+  command  => 'sudo sed -i '43i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;
+\n\t autoindex on;\n\t}\n' /etc/nginx/sites-available/default',
   provider => shell,
   before   => Exec['config'],
 }
