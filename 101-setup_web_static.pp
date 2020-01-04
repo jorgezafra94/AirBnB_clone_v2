@@ -30,7 +30,7 @@ exec {'owner':
 }
 
 exec {'content':
-  command  => 'sudo sed -i "43i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t autoindex on;\n\t}\n" /etc/nginx/sites-available/default',
+  command  => 'sudo sed -i \'43i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t autoindex on;\n\t}\n\' /etc/nginx/sites-available/default',
   provider => shell,
   before   => Exec['config'],
 }
