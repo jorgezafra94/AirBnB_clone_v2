@@ -1,7 +1,7 @@
 # set_up the servers
 
 exec {'install-Nginx':
-  command  => 'sudo apt update ; sudo apt -y install nginx ; echo "Holberton School" | sudo tee /var/www/html/index.html',
+  command  => 'sudo apt update ; sudo apt -y install nginx',
   provider => shell,
   before   => Exec['create folders'],
 }
@@ -13,9 +13,9 @@ exec {'create folders':
 }
 
 exec {'create file':
-  command => 'echo "Fake content" | sudo tee  /data/web_static/releases/test/index.html',
-  path    => '/usr/bin:/usr/sbin:/bin',
-  before  => Exec['symbolic'],
+  command  => 'echo "Fake content" | sudo tee /data/web_static/releases/test/index.html',
+  provider => shell,
+  before   => Exec['symbolic'],
 }
 
 exec {'symbolic':
@@ -25,9 +25,8 @@ exec {'symbolic':
 }
 
 exec {'owner':
-  command  => 'sudo chown -R ubuntu:ubuntu /data/',
-  provider => shell,
-  before   => Exec['content'],
+  command => '/bin/chown -R ubuntu:ubuntu /data/',
+  before  => Exec['content'],
 }
 
 exec {'content':
