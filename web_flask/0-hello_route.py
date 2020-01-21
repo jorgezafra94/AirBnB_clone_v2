@@ -1,8 +1,6 @@
 #!/usr/bin/python3
-""" create a web application that listen in port 5000
+""" create a web application that listen in port 5000 flask
 """
-
-
 from flask import Flask
 app = Flask(__name__)
 # condition strict_slashes=False
