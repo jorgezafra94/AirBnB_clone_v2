@@ -39,7 +39,7 @@ class DBStorage:
         """
         dic = {}
         if cls:
-            query = self.__session.query(cls)
+            query = self.__session.query(eval(cls))
             for elem in query:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dic[key] = elem
@@ -75,3 +75,8 @@ class DBStorage:
         sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sec)
         self.__session = Session()
+
+    def close(self):
+        """ close session method Airbnb flask
+        """
+        self.__session.close()
